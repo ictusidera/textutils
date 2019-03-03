@@ -111,7 +111,9 @@ https://github.com/ictusidera/textutils.git
         textutils to-csv -f filename.txt > out.txt
 
 
-# Author: ictusidera@gmail.com
+# Author:
+ictusidera@gmail.com
 
-# Licence : This software is released under the MIT License, see LICENSE.
+# Licence: 
+This software is released under the MIT License, see LICENSE.
 
