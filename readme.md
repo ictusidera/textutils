@@ -12,18 +12,18 @@ https://github.com/ictusidera/textutils.git
 
 ### Options:
 
-  --help : ヘルプメッセージを表示します。
-  --file / -f : ファイル名を指定します。テキスト形式のファイル(*.txt/*.csvなど)のみが指定できます。指定したコマンドの入力を指定したファイルから行うことができます。
-  --text / -t : コマンドへ入力する文字列を指定します。　example) textutils -t "ABCDEF"
+  --help : ヘルプメッセージを表示します。  
+  --file / -f : ファイル名を指定します。テキスト形式のファイル(*.txt/*.csvなど)のみが指定できます。指定したコマンドの入力を指定したファイルから行うことができます。  
+  --text / -t : コマンドへ入力する文字列を指定します。　example) textutils -t "ABCDEF"  
 
 ### Other:
   
-  一部のコマンドでは入力を標準入力から取ることができます。
+  一部のコマンドでは入力を標準入力から取ることができます。  
   一部のコマンドとは以下の通りです。
   
     to-csv, space-to-tab, tab-to-space, reverse, line-sort, line-sort-smart
   
-  標準入力から入力を取ると、unixライクなパイプチェーンが実現できます。
+  標準入力から入力を取ると、unixライクなパイプチェーンが実現できます。  
   一例を示します。
 
   ```cmd
