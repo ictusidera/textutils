@@ -34,10 +34,10 @@ https://github.com/ictusidera/textutils.git
 
 ### Commands:
 
-  #### combinations     組み合わせを生成します 
-    exp(expressions):  出力するテキストのフォーマットを指定します。  ex) "{0}-{1}"
-    population:           母集合を指定します。 ex) "ABCDE"
-    count:                   組み合わせの数を指定します。(populationからcount個数選ぶ組み合わせを出力)
+  #### combinations 組み合わせを生成します 
+    exp(expressions): 出力するテキストのフォーマットを指定します。  ex) "{0}-{1}"
+    population: 母集合を指定します。 ex) "ABCDE"
+    count: 組み合わせの数を指定します。(populationからcount個数選ぶ組み合わせを出力)
 
     example) textutils combinations {0}-{1} A B C 2 -> A-B, A-C, B-C 
 
@@ -81,30 +81,30 @@ https://github.com/ictusidera/textutils.git
 
   #### product          デカルト積を生成します
     exp(expressions): 出力するテキストのフォーマットを指定します。 ex) "{0}-{1}"
-    first:                    1つ目の集合
-    second:               2つ目の集合
+    first: 1つ目の集合
+    second: 2つ目の集合
 
     example) textutils product {0}-{1} AB CD -> AB, AC, AD, BC, BD
 
-  #### reverse          文字列を逆順にして返します 
+  #### reverse 文字列を逆順にして返します 
     example) textutils reverse -t 0123456 -> 6543210
 
     -f/file : テキストファイルを指定すると、中身を読み込み変換して出力します。
         textutils reverse -f filename.txt > out.txt """
         
-  #### space-to-tab     スペースをタブ文字に置換します。(連続する空白文字を一つのタブに置き換え) 
+  #### space-to-tab スペースをタブ文字に置換します。(連続する空白文字を一つのタブに置き換え) 
     example) textutils space-to-tab -t 1 2 3 -> 1\t2\t3
 
     -f/file : テキストファイルを指定すると、ファイルを読み込み変換して出力します。
         textutils space_to_tab　-f filename.txt > out.txt
 
-  #### tab-to-space     タブ文字をスペースに置換します。(連続するタブ文字を一つのスペースに置き換え) 
+  #### tab-to-space タブ文字をスペースに置換します。(連続するタブ文字を一つのスペースに置き換え) 
     example) textutils tab-to-space -t 1\t2\t3 -> 1 2 3
 
     -f/file : テキストファイルを指定すると、ファイルを読み込み変換して出力します。
         textutils tab_to_space -f filename.txt > out.txt
 
-  #### to-csv           スペースをカンマに置換します(連続する空白文字を一つのカンマに置き換え) 
+  #### to-csv スペースをカンマに置換します(連続する空白文字を一つのカンマに置き換え) 
     example) textutils to-csv -t 1 2 3 -> 1,2,3
 
     -f/file : テキストファイルを指定すると、中身を読み込み変換して出力します。
