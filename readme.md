@@ -1,7 +1,11 @@
+# ictusidera/textutils
+
+https://github.com/ictusidera/textutils.git
+
 ## textutils.py
 テキスト操作ユーティリティコマンド
 
-Usage: 
+# Usage: 
 ```cmd
   textutils.py COMMAND [ARGS] [OPTIONS]...
 ```
@@ -105,3 +109,9 @@ Usage:
 
     -f/file : テキストファイルを指定すると、中身を読み込み変換して出力します。
         textutils to-csv -f filename.txt > out.txt
+
+
+# Author: ictusidera@gmail.com
+
+# Licence : This software is released under the MIT License, see LICENSE.
+
