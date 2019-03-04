@@ -1,13 +1,38 @@
 # /usr/bin/env python
 # -*- coding: utf-8 -*-
-
+from __future__ import print_function
 import click
 import itertools
+import chardet
 
 @click.group()
 def command():
     u"""テキスト操作ユーティリティコマンド"""
     pass
+
+# @command.command()
+# @click.argument('exp', nargs=1)
+# @click.argument('population', nargs=-1)
+# def poring(exp, population):
+#     u"""組み合わせを生成します\n
+#     exp(expressions): 出力するテキストのフォーマットを指定します。 ex) "{0}-{1}"
+#     population:       母集合を指定します。 ex) "ABCDE"
+#     count:            組み合わせの数を指定します。(populationからcount個数選ぶ組み合わせを出力)
+
+#     example) textutils combinations {0}-{1} A B C 2 -> A-B, A-C, B-C 
+#      """
+#     commandlist = []
+#     for x in population:
+#         items = x.split(u",")
+#         for item in items:
+#             term = item.split(u"-")
+#             if(len(term) > 2 or len(term) == 0):
+#                 raise SyntaxError("arguments format has SyntaxError: ", item)
+#             else:
+#                 if(term[0].isdigit() and term[1].isdigit()):
+#                     for i in range(int(term[0]), int(term[1])):
+                        
+
 
 @command.command()
 @click.argument('exp', nargs=1)
@@ -22,7 +47,7 @@ def combinations(exp, population, count,):
     example) textutils combinations {0}-{1} A B C 2 -> A-B, A-C, B-C 
      """
     for item in itertools.combinations(population,count):
-        print exp.format(*item)
+        print(exp.format(*item))
 
 
 @command.command()
@@ -39,7 +64,7 @@ def product(exp, first, second):
     """
 
     for item in itertools.product(first,second):
-        print exp.format(*item)
+        print(exp.format(*item))
 
 def smart_order(line):
     first = line.split()[:1]
@@ -50,7 +75,7 @@ def smart_order(line):
         return first[0]
 
 @command.command()
-@click.option('-f', '--file', type=click.File('r'), default=None)
+@click.option('-f', '--file', type=click.File('rb'), default=None)
 def line_sort_smart(file):
     u"""賢い行並べ替え(数字を数値として並べ替え)\n
     example) textutils line-sort-smart -f file_name.txt > out.txt
@@ -68,15 +93,20 @@ def line_sort_smart(file):
         11 テスト結果C\n
     """
     if(not (file)):
-        lines = click.get_text_stream('stdin').readlines()
+        lines = click.get_binary_stream('stdin').readlines()
     else:
         with file as f:
             lines = f.readlines()
+
+    if(lines):
+        encode = chardet.detect(lines[0])["encoding"]
+        encode = encode if encode else "mbcs"
+
     for line  in sorted(lines,key=smart_order):
-        click.echo(line, nl=False)
+        print(line, end="")
 
 @command.command()
-@click.option('-f', '--file', type=click.File('r'), default=None)
+@click.option('-f', '--file', type=click.File('rb'), default=None)
 def line_sort(file):
     u"""行の並べ替え(文字列ABCD順, 数字を数字として並べ替え)\n
     example) textutils line-sort -f file_name.txt > out.txt
@@ -102,16 +132,20 @@ def line_sort(file):
         GH\n
     """
     if(not (file)):
-        lines = click.get_text_stream('stdin').readlines()
+        lines = click.get_binary_stream('stdin').readlines()
     else:
         with file as f:
             lines = f.readlines()
 
+    if(lines):
+        encode = chardet.detect(lines[0])["encoding"]
+        encode = encode if encode else "mbcs"
+
     for line  in sorted(lines):
-        click.echo(line, nl=False)
+        print(line, end="")
 
 @command.command()
-@click.option('-f', '--file', type=click.File('r'), default=None)
+@click.option('-f', '--file', type=click.File('rb'), default=None)
 @click.option('-t', '--text', default=None)
 def csv_to_tab(file, text):
     u"""カンマ区切りをタブ区切りに置換します\n
@@ -120,19 +154,23 @@ def csv_to_tab(file, text):
     -f/file : テキストファイルを指定すると、中身を読み込み変換して出力します。
         textutils csv-to-tab -f filename.txt > out.txt """
     if(not (file or text)):
-        lines = click.get_text_stream('stdin').readlines()
+        lines = click.get_binary_stream('stdin').readlines()
     elif(file):
         with file as f:
             lines = f.readlines()
     elif(text):
         lines = [text]
 
+    if(lines):
+        char_code = chardet.detect(lines[0])["encoding"]
+        char_code = char_code if char_code else "mbcs"
+
     for line in lines:
-        items = ['"' + x + '"' if "," in x else x for x in line.split(",")]
-        click.echo(",".join(items))
+        items = [u'"' + x + u'"' if u"," in x else x for x in line.decode(char_code).split(u",")]
+        print(u",".join(items).strip().encode(char_code))
 
 @command.command()
-@click.option('-f', '--file', type=click.File('r'), default=None)
+@click.option('-f', '--file', type=click.File('rb'), default=None)
 @click.option('-t', '--text', default=None)
 def to_csv(file, text):
     u"""スペースをカンマに置換します(連続する空白文字を一つのカンマに置き換え)\n
@@ -141,20 +179,24 @@ def to_csv(file, text):
     -f/file : テキストファイルを指定すると、中身を読み込み変換して出力します。
         textutils to-csv -f filename.txt > out.txt """
     if(not (file or text)):
-        lines = click.get_text_stream('stdin').readlines()
+        lines = click.get_binary_stream('stdin').readlines()
     elif(file):
         with file as f:
             lines = f.readlines()
     elif(text):
         lines = [text]
 
+    if(lines):
+        char_code = chardet.detect(lines[0])["encoding"]
+        char_code = char_code if char_code else "mbcs"
+
     for line in lines:
-        items = ['"' + x + '"' if "," in x else x for x in line.split()]
-        click.echo(",".join(items))
+        items = [u'"' + x + u'"' if u"," in x else x for x in line.decode(char_code).split()]
+        print(u",".join(items).encode(char_code))
 
 
 @command.command()
-@click.option('-f', '--file', type=click.File('r'), default=None)
+@click.option('-f', '--file', type=click.File('rb'), default=None)
 @click.option('-t', '--text', default=None)
 def tab_to_space(file,text):
     u"""タブ文字をスペースに置換します。(連続するタブ文字を一つのスペースに置き換え)\n
@@ -163,19 +205,23 @@ def tab_to_space(file,text):
     -f/file : テキストファイルを指定すると、ファイルを読み込み変換して出力します。
         textutils tab-to-space-f filename.txt > out.txt """
     if(not (file or text)):
-        lines = click.get_text_stream('stdin').readlines()
+        lines = click.get_binary_stream('stdin').readlines()
     elif(file):
         with file as f:
             lines = f.readlines()
     elif(text):
         lines = [text]
 
+    if(lines):
+        char_code = chardet.detect(lines[0])["encoding"]
+        char_code = char_code if char_code else "mbcs"
+
     for line in lines:
-        click.echo(" ".join(line.split()))
+        print(u" ".join(line.decode(char_code).split()).encode(char_code))
 
 
 @command.command()
-@click.option('-f', '--file', type=click.File('r'), default=None)
+@click.option('-f', '--file', type=click.File('rb'), default=None)
 @click.option('-t', '--text', default=None)
 def space_to_tab(file, text):
     u"""スペースをタブ文字に置換します。(連続する空白文字を一つのタブに置き換え)\n
@@ -184,20 +230,24 @@ def space_to_tab(file, text):
     -f/file : テキストファイルを指定すると、ファイルを読み込み変換して出力します。
         textutils space-to-tab　-f filename.txt > out.txt """
     if(not (file or text)):
-        lines = click.get_text_stream('stdin').readlines()
+        lines = click.get_binary_stream('stdin').readlines()
     elif(file):
         with file as f:
             lines = f.readlines()
     elif(text):
         lines = [text]
 
+    if(lines):
+        char_code = chardet.detect(lines[0])["encoding"]
+        char_code = char_code if char_code else "mbcs"
+
     for line in lines:
-        click.echo("\t".join(line.split()))
+        print(u"\t".join(line.decode(char_code).split()).encode(char_code))
 
 
 @command.command()
-# @click.argument('file', type=click.File('r'))
-@click.option('-f', '--file', type=click.File('r'), default=None)
+# @click.argument('file', type=click.File('rb'))
+@click.option('-f', '--file', type=click.File('rb'), default=None)
 @click.option('-t', '--text', default=None)
 def reverse(file, text):
     u"""文字列を逆順にして返します\n
@@ -206,15 +256,19 @@ def reverse(file, text):
     -f/file : テキストファイルを指定すると、中身を読み込み変換して出力します。
         textutils reverse -f filename.txt > out.txt """
     if(not (file or text)):
-        lines = click.get_text_stream('stdin').readlines()
+        lines = click.get_binary_stream('stdin').readlines()
     elif(file):
         with file as f:
             lines = f.readlines()
     elif(text):
         lines = [text]
 
+    if(lines):
+        char_code = chardet.detect(lines[0])["encoding"]
+        char_code = char_code if char_code else "mbcs"
+
     for line in lines:
-        click.echo(line.strip()[::-1])
+        print(line.decode(char_code).strip()[::-1].encode(char_code))
 
 
 def main():
